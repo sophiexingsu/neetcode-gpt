@@ -29,6 +29,6 @@ class Solution:
         # Convert a list of integers back to a string using itos mapping
         decode_string = ""
         for i in ids: 
-           decode_string += itos[i]
+            decode_string += itos[i]
         return decode_string
         pass
