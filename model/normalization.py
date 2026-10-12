@@ -1,21 +1,34 @@
-import numpy as np
-from numpy.typing import NDArray
+import torch
+import torch.nn
+from torchtyping import TensorType
 
-
+# Round all answers to 4 decimal places: torch.round(tensor, decimals=4)
 class Solution:
-    def forward(self, x: NDArray[np.float64], gamma: NDArray[np.float64], beta: NDArray[np.float64]) -> NDArray[np.float64]:
-        # x: 1D feature vector
-        # gamma: 1D scale parameter (same length as x)
-        # beta: 1D shift parameter (same length as x)
-        # eps = 1e-5
-        # Normalize: x_hat = (x - mean) / sqrt(var + eps)
-        # Scale and shift: out = gamma * x_hat + beta
-        # return np.round(your_answer, 5)
-        mean_x = np.mean(x)
-        eps = 1e-5
-        n = len(x)
-        var = np.mean((x - mean_x)**2)
-        x_hat = (x-mean_x) /math.sqrt(var + eps)
-        out = gamma*x_hat + beta
-        return np.round(out, 5)
+    def reshape(self, to_reshape: TensorType[float]) -> TensorType[float]:
+        # Reshape (M, N) tensor to (M*N/2, 2)
+        # Use torch.reshape(tensor, new_shape)
+        M, N = to_reshape.shape
+        reshaped = torch.reshape(to_reshape, (M*N//2, 2))
+        return torch.round(reshaped, decimals = 4)
+        pass
+
+    def average(self, to_avg: TensorType[float]) -> TensorType[float]:
+        # Compute column-wise mean (average across rows)
+        # Use torch.mean(tensor, dim=0)
+        averaged = torch.mean(to_avg, dim = 0)
+        return torch.round(averaged, decimals =4)
+        pass
+
+    def concatenate(self, cat_one: TensorType[float], cat_two: TensorType[float]) -> TensorType[float]:
+        # Join two tensors side-by-side along dim=1
+        # Use torch.cat((a, b), dim=1)
+        concated = torch.cat((cat_one, cat_two), dim =1)
+        return torch.round(concated, decimals =4)
+        pass
+
+    def get_loss(self, prediction: TensorType[float], target: TensorType[float]) -> TensorType[float]:
+        # Compute Mean Squared Error between prediction and target
+        # Use torch.nn.functional.mse_loss(prediction, target)
+        mse = torch.nn.functional.mse_loss(prediction, target)
+        return torch.round(mse, decimals =4)
         pass
